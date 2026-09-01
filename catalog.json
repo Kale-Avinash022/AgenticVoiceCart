@@ -1,0 +1,86 @@
+[
+    {
+        "id": 1,
+        "name": "Boat Airdopes 141 TWS Earbuds",
+        "price": 1299,
+        "original_price": 4490,
+        "category": "earbuds",
+        "brand": "Boat",
+        "rating": 4.5,
+        "reviews": 18420,
+        "description": "42H Playtime, Beast Mode 80ms Low Latency, ENx Noise Reduction Tech, IPX4 Water Resistance.",
+        "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        "id": 2,
+        "name": "Sony WH-1000XM5 Wireless Noise Cancelling Headphones",
+        "price": 29990,
+        "original_price": 34990,
+        "category": "headphones",
+        "brand": "Sony",
+        "rating": 4.8,
+        "reviews": 9250,
+        "description": "Industry Leading Auto Noise Cancellation, 30-Hour Battery Life, Ultra-comfortable Lightweight Design.",
+        "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        "id": 3,
+        "name": "Apple AirPods Pro (2nd Generation)",
+        "price": 24900,
+        "original_price": 26900,
+        "category": "earbuds",
+        "brand": "Apple",
+        "rating": 4.9,
+        "reviews": 31200,
+        "description": "H2 Chip Powered ANC, Adaptive Audio, Personalized Spatial Audio with Dynamic Head Tracking.",
+        "image": "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        "id": 4,
+        "name": "Boat Rockerz 450 Bluetooth On-Ear Headphones",
+        "price": 1499,
+        "original_price": 3990,
+        "category": "headphones",
+        "brand": "Boat",
+        "rating": 4.3,
+        "reviews": 14200,
+        "description": "15 Hours Non-Stop Playback, 40mm Premium Dynamic Drivers, Soft Padded Earcups.",
+        "image": "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        "id": 5,
+        "name": "Noise ColorFit Pulse 2 Smartwatch",
+        "price": 1799,
+        "original_price": 4999,
+        "category": "smartwatch",
+        "brand": "Noise",
+        "rating": 4.4,
+        "reviews": 8750,
+        "description": "1.85'' TFT LCD Display, 550 Nits Peak Brightness, 50+ Sports Modes, Continuous SpO2 Monitoring.",
+        "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        "id": 6,
+        "name": "JBL Flip 6 Portable Waterproof Bluetooth Speaker",
+        "price": 9999,
+        "original_price": 13999,
+        "category": "speakers",
+        "brand": "JBL",
+        "rating": 4.7,
+        "reviews": 11500,
+        "description": "Louder, More Powerful Sound, IP67 Waterproof and Dustproof, 12 Hours of Continuous Playtime.",
+        "image": "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        "id": 7,
+        "name": "Realme Buds Air 5 ANC TWS Earbuds",
+        "price": 3699,
+        "original_price": 5999,
+        "category": "earbuds",
+        "brand": "Realme",
+        "rating": 4.5,
+        "reviews": 6430,
+        "description": "50dB Deep Active Noise Cancellation, 12.4mm Titanized Driver, 45ms Super Low Latency for Gaming.",
+        "image": "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=800&q=80"
+    }
+]

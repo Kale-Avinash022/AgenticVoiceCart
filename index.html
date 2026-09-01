@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgenticVoiceCart — Intelligent Voice Commerce for Razorpay</title>
+
+    <!-- Typography: Plus Jakarta Sans for Headings, Inter for Body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Standard Razorpay Checkout SDK Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        :root {
+            --bg-canvas: #090d16;
+            --bg-navbar: rgba(15, 23, 42, 0.85);
+            --bg-card-from: rgba(30, 41, 59, 0.75);
+            --bg-card-to: rgba(15, 23, 42, 0.5);
+            --bg-card-hover: rgba(30, 41, 59, 0.95);
+            --bg-input: rgba(30, 41, 59, 0.6);
+            --accent-primary: #2563eb;
+            --accent-cyan: #38bdf8;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --text-heading: #f8fafc;
+            --text-body: #94a3b8;
+            --text-muted: #64748b;
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(59, 130, 246, 0.4);
+            --rzp-blue: #0c66e4;
+            --radius-pill: 9999px;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --font-heading: 'Plus Jakarta Sans', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            background-image: 
+                radial-gradient(ellipse at 20% 10%, rgba(37, 99, 235, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 90%, rgba(56, 189, 248, 0.08) 0%, transparent 50%);
+            color: var(--text-body);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: var(--font-heading);
+            color: var(--text-heading);
+        }
+
+        /* --- Navigation Bar --- */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 0.9rem 2rem;
+        }
+
+        .nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #2563eb, #38bdf8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+        }
+
+        .brand-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-heading);
+            letter-spacing: -0.02em;
+        }
+
+        .brand-badge {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: var(--accent-emerald);
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.2rem 0.55rem;
+            border-radius: var(--radius-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Search Container & Dedicated Mic Button --- */
+        .search-container {
+            flex: 1;
+            max-width: 560px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar {
+            width: 100%;
+            background: var(--bg-input);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-pill);
+            padding: 0.75rem 3.5rem 0.75rem 1.35rem;
+            color: var(--text-heading);
+            font-family: var(--font-body);
+            font-size: 0.92rem;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .search-bar:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+            background: rgba(30, 41, 59, 0.9);
+        }
+
+        .search-container.recording .search-bar {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .mic-btn {
+            position: absolute;
+            right: 6px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan));
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .mic-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 18px rgba(56, 189, 248, 0.5);
+        }
+
+        .mic-btn.recording {
+            background: #ef4444;
+            animation: pulse-ring 1.5s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* Dynamic Status Indicator */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            color: var(--text-heading);
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 0.45rem 0.9rem;
+            border-radius: var(--radius-pill);
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            transition: all 0.3s ease;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-emerald);
+            box-shadow: 0 0 8px var(--accent-emerald);
+            transition: background 0.3s;
+        }
+
+        .status-dot.busy {
+            background: var(--accent-amber);
+            box-shadow: 0 0 8px var(--accent-amber);
+            animation: pulseDot 1s infinite alternate;
+        }
+
+        .status-dot.error {
+            background: #ef4444;
+            box-shadow: 0 0 8px #ef4444;
+        }
+
+        @keyframes pulseDot {
+            0% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        /* --- Main Layout --- */
+        main {
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2.25rem 2rem 5rem 2rem;
+            flex: 1;
+        }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.4) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 2.75rem 3rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-size: 2.35rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--text-body);
+            max-width: 680px;
+            line-height: 1.6;
+            margin-bottom: 1.75rem;
+        }
+
+        /* Functional Quick Query Pills */
+        .prompt-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+        }
+
+        .prompt-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: 0.25rem;
+        }
+
+        .quick-query-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            color: var(--text-heading);
+            font-size: 0.83rem;
+            font-weight: 500;
+            padding: 0.45rem 0.95rem;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .quick-query-pill:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.4);
+            color: var(--accent-cyan);
+            transform: translateY(-2px);
+        }
+
+        /* --- Audio Waveform Visualizer --- */
+        .voice-bar-banner {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+            border: 1px solid var(--border-hover);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.75rem;
+            margin-bottom: 2.25rem;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .voice-bar-banner.active {
+            display: flex;
+        }
+
+        .voice-visualizer {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            flex: 1;
+        }
+
+        .waveform {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 30px;
+        }
+
+        .bar {
+            width: 4px;
+            height: 100%;
+            background: var(--accent-cyan);
+            border-radius: 4px;
+            animation: bounce 0.8s ease-in-out infinite alternate;
+        }
+
+        .bar:nth-child(2) { animation-delay: 0.15s; }
+        .bar:nth-child(3) { animation-delay: 0.35s; }
+        .bar:nth-child(4) { animation-delay: 0.05s; }
+        .bar:nth-child(5) { animation-delay: 0.25s; }
+        .bar:nth-child(6) { animation-delay: 0.45s; }
+
+        @keyframes bounce {
+            0% { height: 6px; opacity: 0.4; }
+            100% { height: 30px; opacity: 1; }
+        }
+
+        .voice-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .voice-status-title {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--accent-cyan);
+        }
+
+        .voice-transcript-text {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-heading);
+        }
+
+        .intent-tags {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* --- Category Filter & Meta --- */
+        .catalog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.75rem;
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 1rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-body);
+            font-family: var(--font-heading);
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-heading);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .tab-btn.active {
+            color: var(--text-heading);
+            background: rgba(37, 99, 235, 0.15);
+            border-color: rgba(37, 99, 235, 0.35);
+        }
+
+        .results-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* --- Standardized Product Grid --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .card {
+            background: linear-gradient(180deg, var(--bg-card-from) 0%, var(--bg-card-to) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), 0 0 30px rgba(59, 130, 246, 0.12);
+        }
+
+        .card-media {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.4));
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover .card-img {
+            transform: scale(1.08);
+        }
+
+        .subtle-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #cbd5e1;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--radius-pill);
+        }
+
+        .card-content {
+            padding: 1.35rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .card-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+        }
+
+        .card-brand {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .card-rating {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--accent-amber);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.08rem;
+            font-weight: 700;
+            line-height: 1.35;
+            color: var(--text-heading);
+            margin-bottom: 0.6rem;
+        }
+
+        .card-desc {
+            font-size: 0.83rem;
+            color: var(--text-body);
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+            flex: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-glass);
+            margin-top: auto;
+        }
+
+        .pricing {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-current {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-heading);
+            line-height: 1;
+        }
+
+        .price-original-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.25rem;
+        }
+
+        .price-original {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .price-discount {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-emerald);
+        }
+
+        .btn-buy {
+            background: linear-gradient(135deg, var(--rzp-blue), var(--accent-primary));
+            border: none;
+            color: white;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 0.65rem 1.15rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(12, 102, 228, 0.35);
+        }
+
+        .btn-buy:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(12, 102, 228, 0.5);
+        }
+
+        /* Empty View */
+        .empty-view {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, var(--bg-card-from) 0%, var(--bg-card-to) 100%);
+            border: 1px dashed var(--border-glass);
+            border-radius: 24px;
+        }
+
+        .empty-icon {
+            font-size: 2.75rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        /* Toast Popup */
+        .toast-popup {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-hover);
+            color: var(--text-heading);
+            padding: 0.85rem 1.25rem;
+            border-radius: var(--radius-md);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1000;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toast-popup.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="brand-logo">
+                <div class="brand-icon">⚡</div>
+                <span class="brand-title">AgenticVoiceCart</span>
+                <span class="brand-badge">Razorpay 2026</span>
+            </a>
+
+            <!-- Search Container + Dedicated Mic Button -->
+            <div id="searchContainer" class="search-container">
+                <input type="text" id="searchInput" class="search-bar" placeholder="Search product catalog or click microphone..." />
+                <button id="micBtn" class="mic-btn" title="Click to Speak">
+                    🎤
+                </button>
+            </div>
+
+            <!-- Dynamic Network Status Indicator -->
+            <div class="nav-right">
+                <div class="status-pill">
+                    <div id="statusDot" class="status-dot"></div>
+                    <span id="statusText">Connected (200 OK)</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Body -->
+    <main>
+        <!-- Hero Banner -->
+        <section class="hero">
+            <h1 class="hero-title">Commerce at the <span>speed of voice.</span></h1>
+            <p class="hero-subtitle">Speak your shopping request naturally. Our OpenAI Whisper AI transcribes your query, extracts intent, and completes instant Razorpay UPI checkout.</p>
+            
+            <div class="prompt-group">
+                <span class="prompt-label">Quick Voice Queries:</span>
+                <button class="quick-query-pill">
+                    🎙️ Sony headphones under ₹30,000
+                </button>
+                <button class="quick-query-pill">
+                    🎙️ Apple AirPods Pro
+                </button>
+                <button class="quick-query-pill">
+                    🎙️ Boat earbuds under ₹2,000
+                </button>
+                <button class="quick-query-pill">
+                    🎙️ JBL bluetooth speaker
+                </button>
+            </div>
+        </section>
+
+        <!-- Dynamic Audio Waveform Visualizer & Intent Banner -->
+        <div id="voiceBanner" class="voice-bar-banner">
+            <div class="voice-visualizer">
+                <div class="waveform">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+                <div class="voice-details">
+                    <div id="voiceStatusTitle" class="voice-status-title">Listening to Microphone...</div>
+                    <div id="voiceTranscriptText" class="voice-transcript-text">"Speak now..."</div>
+                </div>
+            </div>
+            <div id="intentTags" class="intent-tags">
+                <!-- Subtly styled Translucent Badges rendered dynamically -->
+            </div>
+        </div>
+
+        <!-- Catalog Filter Tabs -->
+        <div class="catalog-header">
+            <div class="filter-tabs">
+                <button class="tab-btn active" onclick="filterCatalog('all', this)">All Items</button>
+                <button class="tab-btn" onclick="filterCatalog('earbuds', this)">Earbuds</button>
+                <button class="tab-btn" onclick="filterCatalog('headphones', this)">Headphones</button>
+                <button class="tab-btn" onclick="filterCatalog('smartwatch', this)">Smartwatches</button>
+                <button class="tab-btn" onclick="filterCatalog('speakers', this)">Speakers</button>
+            </div>
+            <div id="resultsMeta" class="results-meta">Loading catalog...</div>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="grid" class="grid">
+            <!-- Dynamic Product Cards -->
+        </div>
+    </main>
+
+    <!-- Toast Popup Notification -->
+    <div id="toast" class="toast-popup">
+        <span id="toastIcon">⚡</span>
+        <span id="toastMsg">Notification Message</span>
+    </div>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        let catalogData = [];
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+
+        const micBtn = document.getElementById("micBtn");
+        const searchInput = document.getElementById("searchInput");
+        const searchContainer = document.getElementById("searchContainer");
+        const voiceBanner = document.getElementById("voiceBanner");
+        const voiceStatusTitle = document.getElementById("voiceStatusTitle");
+        const voiceTranscriptText = document.getElementById("voiceTranscriptText");
+        const intentTags = document.getElementById("intentTags");
+        const grid = document.getElementById("grid");
+        const resultsMeta = document.getElementById("resultsMeta");
+        const toast = document.getElementById("toast");
+        const statusDot = document.getElementById("statusDot");
+        const statusText = document.getElementById("statusText");
+
+        // Web Audio API Audio Chime Tone
+        function playChime() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.2);
+            } catch(e) {}
+        }
+
+        // Set Dynamic Network Status Indicator
+        function setApiStatus(state, message) {
+            statusDot.className = "status-dot " + (state === "busy" ? "busy" : state === "error" ? "error" : "");
+            statusText.innerText = message;
+        }
+
+        // Fetch Catalog Data on Startup
+        window.addEventListener("DOMContentLoaded", () => {
+            loadCatalogData();
+            setupQuickQueryPills();
+        });
+
+        // 2. Functional Quick Query Pills
+        function setupQuickQueryPills() {
+            document.querySelectorAll('.quick-query-pill').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    playChime();
+                    const query = pill.innerText.replace(/["🎙️]/g, '').trim();
+                    searchInput.value = query;
+                    
+                    voiceBanner.classList.add("active");
+                    voiceStatusTitle.innerText = "Voice Query Preset Executed";
+                    voiceTranscriptText.innerText = `"${query}"`;
+
+                    filterByQuery(query);
+                    showToast(`Executing Quick Query: "${query}"`, "⚡");
+                });
+            });
+        }
+
+        async function loadCatalogData() {
+            try {
+                setApiStatus("busy", "Loading Data...");
+                const res = await fetch("http://localhost:8000/catalog");
+                catalogData = await res.json();
+                renderGrid(catalogData);
+                setApiStatus("online", "Connected (200 OK)");
+            } catch (err) {
+                setApiStatus("error", "API Disconnected");
+                showToast("Failed to connect to FastAPI backend.", "❌");
+            }
+        }
+
+        // Real-Time Audio Typing inside Search Bar
+        searchInput.addEventListener("input", (e) => {
+            filterByQuery(e.target.value);
+        });
+
+        function filterByQuery(queryStr) {
+            const clean = queryStr.toLowerCase().trim();
+            if (!clean) {
+                renderGrid(catalogData);
+                return;
+            }
+            const filtered = catalogData.filter(p => 
+                p.name.toLowerCase().includes(clean) ||
+                p.brand.toLowerCase().includes(clean) ||
+                p.category.toLowerCase().includes(clean)
+            );
+            renderGrid(filtered);
+        }
+
+        // 3. Upgraded Dedicated Action Mic Button with Pulsing Ripple Ring
+        micBtn.addEventListener("click", () => {
+            playChime();
+            if (!isRecording) startRecording();
+            else stopRecording();
+        });
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+                mediaRecorder.onstop = async () => {
+                    const blob = new Blob(audioChunks, { type: 'audio/wav' });
+                    sendVoiceToApi(blob);
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                micBtn.classList.add("recording");
+                searchContainer.classList.add("recording");
+                micBtn.innerHTML = "⏹️";
+
+                voiceBanner.classList.add("active");
+                voiceStatusTitle.innerText = "Listening to Your Microphone...";
+                voiceTranscriptText.innerText = "Speak now (5 seconds)...";
+                intentTags.innerHTML = "";
+
+                setApiStatus("busy", "Listening to Mic...");
+                showToast("Microphone Active! Listening...", "🎙️");
+
+                setTimeout(() => {
+                    if (isRecording) stopRecording();
+                }, 5000);
+
+            } catch (err) {
+                showToast("Mic Access Denied: " + err.message, "⚠️");
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                micBtn.classList.remove("recording");
+                searchContainer.classList.remove("recording");
+                micBtn.innerHTML = "🎤";
+                voiceStatusTitle.innerText = "Whisper AI Transcribing & Parsing Intent...";
+                voiceTranscriptText.innerText = "Analyzing speech audio...";
+                setApiStatus("busy", "Transcribing Speech...");
+            }
+        }
+
+        async function sendVoiceToApi(blob) {
+            const formData = new FormData();
+            formData.append("audio", blob, "recording.wav");
+
+            try {
+                const res = await fetch("http://localhost:8000/process_voice", {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (data.success && data.text) {
+                    voiceStatusTitle.innerText = "Voice Intent Recognized";
+                    voiceTranscriptText.innerText = `"${data.text}"`;
+                    
+                    // Live typing feedback inside search bar
+                    searchInput.value = data.text;
+
+                    // Translucent Badges for Intent
+                    intentTags.innerHTML = "";
+                    if (data.intent) {
+                        if (data.intent.query) intentTags.innerHTML += `<span class="subtle-badge" style="position:static;">🔍 Query: ${data.intent.query}</span>`;
+                        if (data.intent.max_price) intentTags.innerHTML += `<span class="subtle-badge" style="position:static;">💰 Max Price: ₹${data.intent.max_price.toLocaleString("en-IN")}</span>`;
+                        if (data.intent.brand) intentTags.innerHTML += `<span class="subtle-badge" style="position:static;">🏷️ Brand: ${data.intent.brand}</span>`;
+                    }
+
+                    renderGrid(data.results);
+                    setApiStatus("online", "Connected (200 OK)");
+                    showToast(`Found ${data.count} product(s) matching intent!`, "✨");
+                } else {
+                    voiceStatusTitle.innerText = "Notice";
+                    voiceTranscriptText.innerText = data.message || "No speech detected.";
+                    setApiStatus("online", "Connected (200 OK)");
+                    showToast("No speech detected. Try speaking clearly.", "⚠️");
+                }
+            } catch (err) {
+                setApiStatus("error", "API Connection Failed");
+                showToast("Server Connection Error: " + err.message, "❌");
+            }
+        }
+
+        // Category Filter Tabs
+        function filterCatalog(cat, btnElement) {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            btnElement.classList.add("active");
+
+            if (cat === "all") {
+                renderGrid(catalogData);
+            } else {
+                const filtered = catalogData.filter(p => p.category.toLowerCase() === cat);
+                renderGrid(filtered);
+            }
+        }
+
+        // Render Product Cards Grid (Fixed 4:3 Neutral Studio Aspect-Ratio & Object Contain)
+        function renderGrid(products) {
+            grid.innerHTML = "";
+            resultsMeta.innerText = `Showing ${products ? products.length : 0} products`;
+
+            if (!products || products.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-view">
+                        <div class="empty-icon">🔍</div>
+                        <h3>No matching products found</h3>
+                        <p style="color: var(--text-muted); margin-top: 0.4rem;">Try speaking another query or resetting category filters.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            products.forEach(item => {
+                const discountPercent = item.original_price ? 
+                    Math.round(((item.original_price - item.price) / item.original_price) * 100) : 0;
+
+                const card = document.createElement("div");
+                card.className = "card";
+                card.innerHTML = `
+                    <div class="card-media">
+                        <!-- Soft Translucent Glassmorphism Brand Badge -->
+                        <span class="subtle-badge">${item.brand}</span>
+                        <img class="card-img" src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta-row">
+                            <span class="card-brand">${item.category}</span>
+                            <span class="card-rating">★ ${item.rating || '4.5'} (${(item.reviews || 1200).toLocaleString("en-IN")})</span>
+                        </div>
+                        <h3 class="card-title">${item.name}</h3>
+                        <p class="card-desc">${item.description}</p>
+                        <div class="card-footer">
+                            <div class="pricing">
+                                <div class="price-current">₹${item.price.toLocaleString("en-IN")}</div>
+                                ${item.original_price ? `
+                                    <div class="price-original-wrap">
+                                        <span class="price-original">₹${item.original_price.toLocaleString("en-IN")}</span>
+                                        <span class="price-discount">${discountPercent}% OFF</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <button class="btn-buy" onclick="checkoutProduct(${item.id})">
+                                💳 Buy Now
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Robust Razorpay Payment Checkout Handler with Fail-Safe Backend Response Validation
+        async function checkoutProduct(itemId) {
+            console.log(`[Checkout] Initiating order creation for item_id: ${itemId}`);
+            showToast("Creating Razorpay Order...", "💳");
+            setApiStatus("busy", "Creating Order...");
+
+            try {
+                // 1. Call Backend API Endpoint /api/create-order
+                const res = await fetch("http://localhost:8000/api/create-order", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ item_id: itemId })
+                });
+
+                // 2. Strict Error Handling: Log exact backend response if API fails
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    console.error("[Backend Error Response]:", res.status, errorText);
+                    setApiStatus("error", `API Error ${res.status}`);
+                    showToast(`Backend API Error (${res.status}): ${errorText}`, "❌");
+                    return; // DO NOT open broken Razorpay modal!
+                }
+
+                const data = await res.json();
+                console.log("[Backend Order Response]:", data);
+
+                if (!data.success || !data.order_id) {
+                    console.error("[Invalid Order Response Data]:", data);
+                    setApiStatus("error", "Invalid Order");
+                    showToast("Failed to generate order ID from backend.", "❌");
+                    return; // DO NOT open broken Razorpay modal!
+                }
+
+                setApiStatus("online", "Connected (200 OK)");
+
+                const order = data.order || {};
+                const item = data.item || {};
+                const razorpayKey = data.razorpay_key_id || "rzp_test_YourTestKeyId";
+
+                // 3. Modal Options with Pre-filled Customer Details
+                const options = {
+                    key: razorpayKey,
+                    amount: data.amount || (item.price * 100),
+                    currency: data.currency || "INR",
+                    name: "AgenticVoiceCart",
+                    description: `Purchase: ${item.name}`,
+                    order_id: data.order_id,
+                    handler: function (response) {
+                        console.log("[Razorpay Payment Success Response]:", response);
+                        alert(`🎉 Payment Successful!\n\nPayment ID: ${response.razorpay_payment_id || 'pay_test_success_123'}\nOrder ID: ${response.razorpay_order_id || data.order_id}\nProduct: ${item.name}\nAmount: ₹${item.price.toLocaleString("en-IN")}`);
+                        showToast("Payment Successful!", "🎉");
+                    },
+                    prefill: {
+                        name: "Test Customer",
+                        email: "customer@agenticvoicecart.ai",
+                        contact: "9999999999"
+                    },
+                    notes: {
+                        merchant_order_id: data.order_id,
+                        purchase_source: "Voice Agent Checkout"
+                    },
+                    theme: {
+                        color: "#0c66e4"
+                    },
+                    modal: {
+                        ondismiss: function() {
+                            console.log("[Razorpay Modal Dismissed by User]");
+                            showToast("Payment checkout cancelled.", "ℹ️");
+                        }
+                    }
+                };
+
+                // 4. Verify Razorpay Checkout SDK Script
+                if (typeof Razorpay === "undefined") {
+                    console.error("Razorpay Checkout SDK JS script is not loaded.");
+                    showToast("Razorpay SDK script not loaded.", "❌");
+                    return;
+                }
+
+                // 5. Open Razorpay Checkout Modal or Fallback Gracefully
+                try {
+                    const rzp = new Razorpay(options);
+                    
+                    rzp.on('payment.failed', function (response){
+                        console.error("[Razorpay Payment Failed]:", response.error);
+                        showToast(`Payment Failed: ${response.error.description}`, "❌");
+                    });
+
+                    rzp.open();
+                } catch (sdkError) {
+                    console.warn("[Razorpay SDK Launch Exception]:", sdkError);
+                    showDemoCheckoutAlert(item, data.order_id);
+                }
+
+            } catch (err) {
+                console.error("[Network / API Fetch Error]:", err);
+                setApiStatus("error", "Network Error");
+                showToast("Network Error connecting to backend API: " + err.message, "❌");
+            }
+        }
+
+        // Demo Fallback Alert for Dummy Keys
+        function showDemoCheckoutAlert(item, orderId) {
+            alert(`💳 Razorpay Test Order Created!\n\nOrder ID: ${orderId}\nItem: ${item.name}\nAmount: ₹${item.price.toLocaleString("en-IN")}\n\n(Note: To process live test cards, add your real Razorpay Test API Key to razorpay_client.py!)`);
+            showToast(`Test Order Created: ${orderId}`, "💳");
+        }
+
+        // Toast Helper
+        function showToast(msg, icon = "⚡") {
+            document.getElementById("toastIcon").innerText = icon;
+            document.getElementById("toastMsg").innerText = msg;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3200);
+        }
+    </script>
+</body>
+</html>

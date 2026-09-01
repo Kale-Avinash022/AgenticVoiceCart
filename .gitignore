@@ -1,6 +1,27 @@
-# Ignore everything
-*
+# Virtual Environment & Python Caches
+venv/
+ENV/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# Whitelist README.md and .gitignore
-!README.md
-!.gitignore
+# Temporary Audio Recording Files & Scratch Scripts
+*.wav
+*.mp3
+*.webm
+*.ps1
+test_*.py
+record_*.py
+sample_*.wav
+
+# Internal Step Log Files & Draft Prompts
+step_*.txt
+plan.txt
+prompt.txt
+
+# System / OS Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
