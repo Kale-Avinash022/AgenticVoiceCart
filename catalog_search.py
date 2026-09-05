@@ -67,6 +67,40 @@ def search_catalog(query: str = "", max_price: int = None, brand: str = None, ca
     results.sort(key=lambda x: x.get("price", 0))
     return results
 
+def get_product_by_id(item_id: int) -> dict:
+    """Retrieves single product by ID."""
+    catalog = load_catalog()
+    return next((p for p in catalog if p.get("id") == item_id), None)
+
+def get_upsell_recommendation(item_id: int) -> dict:
+    """
+    AI Merchant Growth Engine: Retrieves smart upsell accessory/bundle
+    to increase Average Order Value (AOV) for merchants.
+    """
+    product = get_product_by_id(item_id)
+    if not product or "upsell" not in product:
+        return None
+    
+    upsell = product["upsell"]
+    base_price = product["price"]
+    addon_price = upsell["price"]
+    discount = upsell.get("bundle_discount", 0)
+    bundle_total = base_price + addon_price - discount
+
+    return {
+        "product_id": item_id,
+        "product_name": product["name"],
+        "base_price": base_price,
+        "upsell_name": upsell["name"],
+        "upsell_price": addon_price,
+        "upsell_original_price": upsell.get("original_price", addon_price),
+        "bundle_discount": discount,
+        "benefit": upsell.get("benefit", "Protection & Performance Booster"),
+        "bundle_total": bundle_total,
+        "merchant_revenue_increase": f"+{round((addon_price - discount)/base_price * 100, 1)}%"
+    }
+
+
 if __name__ == "__main__":
     print("\n--- Catalog Search Engine Test ---")
     

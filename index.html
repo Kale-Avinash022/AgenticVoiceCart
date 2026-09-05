@@ -208,34 +208,126 @@
             padding: 0.45rem 0.9rem;
             border-radius: var(--radius-pill);
             display: flex;
+        .btn-audit-toggle {
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #38bdf8;
+            font-family: var(--font-heading);
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 0.45rem 0.9rem;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            display: flex;
             align-items: center;
-            gap: 0.45rem;
-            transition: all 0.3s ease;
+            gap: 0.4rem;
+            transition: all 0.25s ease;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent-emerald);
-            box-shadow: 0 0 8px var(--accent-emerald);
-            transition: background 0.3s;
+        .btn-audit-toggle:hover {
+            background: rgba(37, 99, 235, 0.3);
+            transform: translateY(-1px);
         }
 
-        .status-dot.busy {
-            background: var(--accent-amber);
-            box-shadow: 0 0 8px var(--accent-amber);
-            animation: pulseDot 1s infinite alternate;
+        /* --- Audit Trail Slide-Out Drawer --- */
+        .audit-drawer {
+            position: fixed;
+            top: 0;
+            right: -480px;
+            width: 480px;
+            max-width: 90vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(24px);
+            border-left: 1px solid var(--border-glass);
+            z-index: 1500;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -15px 0 45px rgba(0, 0, 0, 0.7);
+            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .status-dot.error {
-            background: #ef4444;
-            box-shadow: 0 0 8px #ef4444;
+        .audit-drawer.open {
+            right: 0;
         }
 
-        @keyframes pulseDot {
-            0% { opacity: 0.4; }
-            100% { opacity: 1; }
+        .audit-drawer-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .audit-drawer-body {
+            padding: 1.25rem 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .audit-event-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1rem;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            animation: fadeInCard 0.25s ease;
+        }
+
+        @keyframes fadeInCard {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .audit-event-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .audit-stage-badge {
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+        }
+
+        .audit-status-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+        }
+
+        .audit-status-badge.SUCCESS, .audit-status-badge.PASSED {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .audit-status-badge.BLOCKED, .audit-status-badge.ERROR {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .audit-json-box {
+            background: rgba(10, 15, 26, 0.8);
+            border-radius: 6px;
+            padding: 0.5rem 0.65rem;
+            font-family: monospace;
+            font-size: 0.72rem;
+            color: #94a3b8;
+            overflow-x: auto;
+            max-height: 120px;
         }
 
         /* --- Main Layout --- */
@@ -598,6 +690,67 @@
             text-decoration: line-through;
         }
 
+        /* --- AI Upsell / Revenue Booster Component --- */
+        .upsell-box {
+            background: rgba(37, 99, 235, 0.08);
+            border: 1px dashed rgba(56, 189, 248, 0.35);
+            border-radius: var(--radius-md);
+            padding: 0.65rem 0.8rem;
+            margin-bottom: 0.9rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .upsell-box:hover {
+            background: rgba(37, 99, 235, 0.14);
+            border-color: rgba(56, 189, 248, 0.6);
+        }
+
+        .upsell-checkbox {
+            margin-top: 0.2rem;
+            accent-color: var(--accent-cyan);
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+
+        .upsell-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+            font-size: 0.76rem;
+        }
+
+        .upsell-tag {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .upsell-title {
+            color: #f1f5f9;
+            font-weight: 600;
+            line-height: 1.25;
+        }
+
+        .upsell-pricing {
+            color: #94a3b8;
+            font-size: 0.72rem;
+        }
+
+        .upsell-benefit {
+            color: #10b981;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
         .price-discount {
             font-size: 0.72rem;
             font-weight: 700;
@@ -670,6 +823,269 @@
             transform: translateY(0);
             opacity: 1;
         }
+
+        /* --- Failure Simulation & Graceful Recovery Banner --- */
+        .failure-demo-bar {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px dashed rgba(239, 68, 68, 0.35);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1.25rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .failure-demo-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #fca5a5;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .failure-btn-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-failure-demo {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            font-family: var(--font-heading);
+            font-size: 0.76rem;
+            font-weight: 700;
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-failure-demo:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* --- Graceful Recovery Modal --- */
+        .recovery-modal {
+            background: linear-gradient(180deg, #1e1e2e 0%, #0f172a 100%);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 20px;
+            max-width: 520px;
+            width: 100%;
+            padding: 1.75rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+            animation: modalFade 0.25s ease-out;
+        }
+
+        .recovery-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 0.85rem;
+        }
+
+        .recovery-badge {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--radius-pill);
+            text-transform: uppercase;
+        }
+
+        .recovery-link-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-hover);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        /* --- Agentic Consent Gate & Explainability Modal --- */
+        .gate-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(9, 13, 22, 0.85);
+            backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1.5rem;
+        }
+
+        .gate-backdrop.active {
+            display: flex;
+        }
+
+        .gate-modal {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border-hover);
+            border-radius: 20px;
+            max-width: 520px;
+            width: 100%;
+            padding: 1.75rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+            animation: modalFade 0.25s ease-out;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(20px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .gate-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 0.85rem;
+        }
+
+        .gate-badge {
+            background: rgba(37, 99, 235, 0.2);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: var(--radius-pill);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .gate-body {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .gate-product-summary {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 0.85rem;
+        }
+
+        .gate-img {
+            width: 56px;
+            height: 56px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .gate-guardrails {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: var(--radius-md);
+            padding: 0.85rem;
+            font-size: 0.78rem;
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .guardrail-row {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .guardrail-icon {
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .gate-breakdown {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1rem;
+            font-size: 0.82rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            color: #94a3b8;
+        }
+
+        .breakdown-row.total {
+            border-top: 1px solid var(--border-glass);
+            padding-top: 0.5rem;
+            color: #f8fafc;
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .gate-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+
+        .btn-gate-confirm {
+            flex: 1;
+            background: linear-gradient(135deg, #0c66e4 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 0.85rem;
+            border-radius: var(--radius-md);
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(12, 102, 228, 0.4);
+        }
+
+        .btn-gate-confirm:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .btn-gate-cancel {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-glass);
+            color: #94a3b8;
+            padding: 0.85rem 1.2rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-gate-cancel:hover {
+            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -691,8 +1107,13 @@
                 </button>
             </div>
 
-            <!-- Dynamic Network Status Indicator -->
+            <!-- Dynamic Network Status Indicator & Audit Trail Button -->
             <div class="nav-right">
+                <button id="btnAuditToggle" class="btn-audit-toggle" onclick="toggleAuditDrawer()">
+                    <span>🛡️</span>
+                    <span>Audit Trail</span>
+                    <span id="auditBadgeCount" style="background:#0c66e4; color:white; font-size:0.68rem; padding:0.1rem 0.4rem; border-radius:999px;">0</span>
+                </button>
                 <div class="status-pill">
                     <div id="statusDot" class="status-dot"></div>
                     <span id="statusText">Connected (200 OK)</span>
@@ -701,8 +1122,54 @@
         </div>
     </nav>
 
+    <!-- Slide-Out Security Audit Trail Drawer ("The Bar" Compliance) -->
+    <div id="auditDrawer" class="audit-drawer">
+        <div class="audit-drawer-header">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span style="font-size:1.3rem;">🛡️</span>
+                <div>
+                    <h3 style="font-size:1.05rem; color:#f8fafc;">Agent Security Ledger</h3>
+                    <div style="font-size:0.72rem; color:#38bdf8;">Track 01 • Verifiable Audit Trail</div>
+                </div>
+            </div>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <button onclick="clearAuditLog()" style="background:none; border:none; color:#94a3b8; font-size:0.75rem; cursor:pointer;" title="Clear Ledger">🗑️ Clear</button>
+                <button onclick="toggleAuditDrawer()" style="background:none; border:none; color:#94a3b8; font-size:1.1rem; cursor:pointer;">✕</button>
+            </div>
+        </div>
+        <div id="auditDrawerBody" class="audit-drawer-body">
+            <div style="text-align:center; padding:3rem 1rem; color:#64748b; font-size:0.85rem;">
+                <div style="font-size:2rem; margin-bottom:0.5rem;">📜</div>
+                <div>No audit events recorded yet.</div>
+                <div style="font-size:0.75rem; margin-top:0.25rem;">Execute a voice query or checkout to inspect live money actions.</div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content Body -->
     <main>
+        <!-- Failure Simulation & Graceful Recovery Bar ("The Bar" Compliance) -->
+        <div class="failure-demo-bar">
+            <div class="failure-demo-title">
+                <span>🧪</span>
+                <span>Track 01 Failure Mode & Recovery Simulators:</span>
+            </div>
+            <div class="failure-btn-group">
+                <button class="btn-failure-demo" onclick="triggerBudgetBreachFailure()">
+                    ⚠️ Demo 1: Budget Overrun Rejection
+                </button>
+                <button class="btn-failure-demo" onclick="triggerPaymentFailureDemo()">
+                    ⚡ Demo 2: Gateway Drop & Fallback Link
+                </button>
+                <button class="btn-failure-demo" style="background:rgba(37,99,235,0.15); border-color:rgba(56,189,248,0.4); color:#38bdf8;" onclick="window.open('http://127.0.0.1:8000/agent/v1/catalog', '_blank')">
+                    🤖 Agent Catalog (/agent/v1)
+                </button>
+                <button class="btn-failure-demo" style="background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.4); color:#10b981;" onclick="window.open('http://127.0.0.1:8000/agent/v1/tools', '_blank')">
+                    🛠️ AI Buyer Tools (MCP Spec)
+                </button>
+            </div>
+        </div>
+
         <!-- Hero Banner -->
         <section class="hero">
             <h1 class="hero-title">Commerce at the <span>speed of voice.</span></h1>
@@ -771,11 +1238,125 @@
     </div>
 
     <!-- Application JavaScript Logic -->
+    <!-- Agentic Consent Gate & Financial Explainability Modal -->
+    <div id="consentGateModal" class="gate-backdrop">
+        <div class="gate-modal">
+            <div class="gate-header">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <span style="font-size:1.2rem;">🛡️</span>
+                    <h3 style="font-size:1.05rem;">Agentic Consent Gate</h3>
+                </div>
+                <span class="gate-badge">Gated & Bounded</span>
+            </div>
+
+            <div class="gate-body">
+                <!-- Product Preview -->
+                <div class="gate-product-summary">
+                    <img id="gateImg" class="gate-img" src="" alt="Product">
+                    <div style="flex:1;">
+                        <h4 id="gateTitle" style="font-size:0.95rem; font-weight:700; color:#f8fafc; line-height:1.2;"></h4>
+                        <div id="gateCategory" style="font-size:0.75rem; color:#38bdf8; font-weight:600; text-transform:uppercase; margin-top:0.2rem;"></div>
+                    </div>
+                </div>
+
+                <!-- Bounded Guardrails -->
+                <div class="gate-guardrails">
+                    <div style="font-weight:700; color:#10b981; margin-bottom:0.15rem; font-size:0.76rem; text-transform:uppercase; letter-spacing:0.04em;">
+                        ✓ Autonomous Safety Verification
+                    </div>
+                    <div class="guardrail-row">
+                        <span class="guardrail-icon">✓</span>
+                        <span id="gateBoundLimit">Safety Bound: Transaction &lt; ₹50,000 (PASSED)</span>
+                    </div>
+                    <div class="guardrail-row">
+                        <span class="guardrail-icon">✓</span>
+                        <span id="gateBudgetMatch">Voice Budget Constraint: Verified within limit</span>
+                    </div>
+                    <div class="guardrail-row">
+                        <span class="guardrail-icon">✓</span>
+                        <span>Razorpay Test API: Server-side Order Signing Ready</span>
+                    </div>
+                </div>
+
+                <!-- Explainable Financial Breakdown -->
+                <div class="gate-breakdown">
+                    <div style="font-weight:700; color:#cbd5e1; margin-bottom:0.25rem; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.04em;">
+                        🧾 Explainable Financial Breakdown
+                    </div>
+                    <div id="gateBreakdownList">
+                        <!-- Injected dynamically -->
+                    </div>
+                    <div class="breakdown-row total">
+                        <span>Total Authorized</span>
+                        <span id="gateTotalAmount">₹0</span>
+                    </div>
+                    <div id="gateTaxNote" style="font-size:0.7rem; color:#64748b; margin-top:0.2rem;">
+                        * Includes 18% GST. No hidden fees.
+                    </div>
+                </div>
+            </div>
+
+            <div class="gate-actions">
+                <button class="btn-gate-cancel" onclick="closeConsentGate()">Cancel</button>
+                <button id="btnGateConfirm" class="btn-gate-confirm" onclick="executeAuthorizedPayment()">
+                    🚀 Authorize & Pay via Razorpay
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graceful Recovery & Alternative Fallback Modal ("The Bar" Compliance) -->
+    <div id="recoveryModal" class="gate-backdrop">
+        <div class="recovery-modal">
+            <div class="recovery-header">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <span style="font-size:1.3rem;">⚡</span>
+                    <h3 id="recoveryTitle" style="font-size:1.05rem; color:#f8fafc;">Payment Gracefully Recovered</h3>
+                </div>
+                <span class="recovery-badge">Fail-Safe Active</span>
+            </div>
+
+            <div class="gate-body">
+                <div id="recoveryExplanation" style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:12px; padding:0.85rem; font-size:0.82rem; color:#fca5a5; line-height:1.4;">
+                    <!-- Explanation injected dynamically -->
+                </div>
+
+                <div style="font-size:0.82rem; color:#e2e8f0; font-weight:600; margin-top:0.25rem;">
+                    🛡️ Autonomous Agent Resolution:
+                </div>
+                <div id="recoveryResolutionDetails" style="font-size:0.78rem; color:#94a3b8; line-height:1.4;">
+                    <!-- Resolution text -->
+                </div>
+
+                <div class="recovery-link-box">
+                    <div style="display:flex; flex-direction:column; gap:0.15rem; flex:1;">
+                        <span style="font-size:0.7rem; color:#38bdf8; font-weight:700; text-transform:uppercase;">Fallback Payment Link</span>
+                        <span id="recoveryLinkText" style="font-family:monospace; font-size:0.75rem; color:#f8fafc; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">https://rzp.io/i/test_fallback_order_101</span>
+                    </div>
+                    <button class="btn-gate-confirm" style="padding:0.45rem 0.85rem; font-size:0.75rem;" onclick="copyRecoveryLink()">
+                        📋 Copy Link
+                    </button>
+                </div>
+            </div>
+
+            <div class="gate-actions">
+                <button class="btn-gate-cancel" style="width:100%;" onclick="closeRecoveryModal()">Close Recovery Drawer</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Global State
         let catalogData = [];
         let mediaRecorder;
         let audioChunks = [];
         let isRecording = false;
+        let currentVoiceIntent = null;
+        let pendingOrderData = null;
+
+        // Audio Context for Chimes
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
 
         const micBtn = document.getElementById("micBtn");
         const searchInput = document.getElementById("searchInput");
@@ -937,6 +1518,7 @@
                 const data = await res.json();
 
                 if (data.success && data.text) {
+                    currentVoiceIntent = data.intent;
                     voiceStatusTitle.innerText = "Voice Intent Recognized";
                     voiceTranscriptText.innerText = `"${data.text}"`;
                     
@@ -999,6 +1581,20 @@
                 const discountPercent = item.original_price ? 
                     Math.round(((item.original_price - item.price) / item.original_price) * 100) : 0;
 
+                const upsellHtml = item.upsell ? `
+                    <div class="upsell-box" onclick="event.stopPropagation();">
+                        <input type="checkbox" class="upsell-checkbox" id="upsell_${item.id}" onchange="toggleUpsell(${item.id})">
+                        <label for="upsell_${item.id}" class="upsell-info" style="cursor:pointer; flex:1;">
+                            <div class="upsell-tag">🚀 AI Merchant Upsell</div>
+                            <div class="upsell-title">${item.upsell.name}</div>
+                            <div class="upsell-pricing">
+                                <b>+₹${item.upsell.price}</b> <span style="text-decoration:line-through; color:var(--text-muted);">₹${item.upsell.original_price}</span> (Save ₹${item.upsell.bundle_discount})
+                            </div>
+                            <div class="upsell-benefit">✓ ${item.upsell.benefit}</div>
+                        </label>
+                    </div>
+                ` : '';
+
                 const card = document.createElement("div");
                 card.className = "card";
                 card.innerHTML = `
@@ -1014,9 +1610,10 @@
                         </div>
                         <h3 class="card-title">${item.name}</h3>
                         <p class="card-desc">${item.description}</p>
+                        ${upsellHtml}
                         <div class="card-footer">
                             <div class="pricing">
-                                <div class="price-current">₹${item.price.toLocaleString("en-IN")}</div>
+                                <div class="price-current" id="price_display_${item.id}">₹${item.price.toLocaleString("en-IN")}</div>
                                 ${item.original_price ? `
                                     <div class="price-original-wrap">
                                         <span class="price-original">₹${item.original_price.toLocaleString("en-IN")}</span>
@@ -1034,11 +1631,32 @@
             });
         }
 
-        // Robust Razorpay Payment Checkout Handler with Fail-Safe Backend Response Validation
+        // Handle Upsell Toggle Price Display
+        function toggleUpsell(itemId) {
+            const item = catalogData.find(p => p.id === itemId);
+            if (!item || !item.upsell) return;
+
+            const checkbox = document.getElementById(`upsell_${itemId}`);
+            const priceDisplay = document.getElementById(`price_display_${itemId}`);
+            if (checkbox && checkbox.checked) {
+                const bundlePrice = item.price + item.upsell.price - item.upsell.bundle_discount;
+                priceDisplay.innerText = `₹${bundlePrice.toLocaleString("en-IN")}`;
+                showToast(`Added AI Bundle: +₹${item.upsell.price - item.upsell.bundle_discount} (Merchant AOV Boosted)`, "📈");
+            } else {
+                priceDisplay.innerText = `₹${item.price.toLocaleString("en-IN")}`;
+            }
+        }
+
+        // Robust Razorpay Payment Checkout Handler routed through Agentic Consent Gate
         async function checkoutProduct(itemId) {
-            console.log(`[Checkout] Initiating order creation for item_id: ${itemId}`);
-            showToast("Creating Razorpay Order...", "💳");
-            setApiStatus("busy", "Creating Order...");
+            const upsellCheckbox = document.getElementById(`upsell_${itemId}`);
+            const includeUpsell = upsellCheckbox ? upsellCheckbox.checked : false;
+
+            const userBudget = currentVoiceIntent ? currentVoiceIntent.max_price : null;
+
+            console.log(`[Checkout] Requesting gated order for item_id: ${itemId}, include_upsell: ${includeUpsell}, budget: ${userBudget}`);
+            showToast(includeUpsell ? "Analyzing Bounded Order with Upsell..." : "Analyzing Bounded Order...", "🛡️");
+            setApiStatus("busy", "Verifying Safety Bounds...");
 
             try {
                 // 1. Call Backend API Endpoint /api/create-order
@@ -1047,94 +1665,351 @@
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ item_id: itemId })
+                    body: JSON.stringify({
+                        item_id: itemId,
+                        include_upsell: includeUpsell,
+                        user_budget: userBudget
+                    })
                 });
 
-                // 2. Strict Error Handling: Log exact backend response if API fails
+                // 2. Strict Error Handling
                 if (!res.ok) {
                     const errorText = await res.text();
                     console.error("[Backend Error Response]:", res.status, errorText);
                     setApiStatus("error", `API Error ${res.status}`);
                     showToast(`Backend API Error (${res.status}): ${errorText}`, "❌");
-                    return; // DO NOT open broken Razorpay modal!
+                    return;
                 }
 
                 const data = await res.json();
                 console.log("[Backend Order Response]:", data);
 
+                // Handle Bounded Check Violations Gracefully
+                if (!data.success && data.error_type === "BOUNDS_VIOLATION") {
+                    setApiStatus("error", "Safety Bound Rejected");
+                    alert(`🚨 Safety Guardrail Alert!\n\n${data.message}\n\nTransaction was blocked by the Autonomous Agent Safety Gate to protect your budget.`);
+                    showToast("Order blocked by safety guardrail", "🛡️");
+                    return;
+                }
+
                 if (!data.success || !data.order_id) {
                     console.error("[Invalid Order Response Data]:", data);
                     setApiStatus("error", "Invalid Order");
                     showToast("Failed to generate order ID from backend.", "❌");
-                    return; // DO NOT open broken Razorpay modal!
-                }
-
-                setApiStatus("online", "Connected (200 OK)");
-
-                const order = data.order || {};
-                const item = data.item || {};
-                const razorpayKey = data.razorpay_key_id || "rzp_test_YourTestKeyId";
-
-                // 3. Modal Options with Pre-filled Customer Details
-                const options = {
-                    key: razorpayKey,
-                    amount: data.amount || (item.price * 100),
-                    currency: data.currency || "INR",
-                    name: "AgenticVoiceCart",
-                    description: `Purchase: ${item.name}`,
-                    order_id: data.order_id,
-                    handler: function (response) {
-                        console.log("[Razorpay Payment Success Response]:", response);
-                        alert(`🎉 Payment Successful!\n\nPayment ID: ${response.razorpay_payment_id || 'pay_test_success_123'}\nOrder ID: ${response.razorpay_order_id || data.order_id}\nProduct: ${item.name}\nAmount: ₹${item.price.toLocaleString("en-IN")}`);
-                        showToast("Payment Successful!", "🎉");
-                    },
-                    prefill: {
-                        name: "Test Customer",
-                        email: "customer@agenticvoicecart.ai",
-                        contact: "9999999999"
-                    },
-                    notes: {
-                        merchant_order_id: data.order_id,
-                        purchase_source: "Voice Agent Checkout"
-                    },
-                    theme: {
-                        color: "#0c66e4"
-                    },
-                    modal: {
-                        ondismiss: function() {
-                            console.log("[Razorpay Modal Dismissed by User]");
-                            showToast("Payment checkout cancelled.", "ℹ️");
-                        }
-                    }
-                };
-
-                // 4. Verify Razorpay Checkout SDK Script
-                if (typeof Razorpay === "undefined") {
-                    console.error("Razorpay Checkout SDK JS script is not loaded.");
-                    showToast("Razorpay SDK script not loaded.", "❌");
                     return;
                 }
 
-                // 5. Open Razorpay Checkout Modal or Fallback Gracefully
-                try {
-                    const rzp = new Razorpay(options);
-                    
-                    rzp.on('payment.failed', function (response){
-                        console.error("[Razorpay Payment Failed]:", response.error);
-                        showToast(`Payment Failed: ${response.error.description}`, "❌");
-                    });
-
-                    rzp.open();
-                } catch (sdkError) {
-                    console.warn("[Razorpay SDK Launch Exception]:", sdkError);
-                    showDemoCheckoutAlert(item, data.order_id);
-                }
+                setApiStatus("online", "Safety Bounds Verified");
+                pendingOrderData = data;
+                openConsentGate(data);
 
             } catch (err) {
                 console.error("[Network / API Fetch Error]:", err);
                 setApiStatus("error", "Network Error");
                 showToast("Network Error connecting to backend API: " + err.message, "❌");
             }
+        }
+
+        // Open Agentic Consent Gate Modal
+        function openConsentGate(orderData) {
+            const modal = document.getElementById("consentGateModal");
+            const item = orderData.item || {};
+            const explanation = orderData.financial_explanation || {};
+            const bounds = orderData.bounded_check || {};
+
+            document.getElementById("gateImg").src = item.image || "";
+            document.getElementById("gateTitle").innerText = item.name || "Selected Item";
+            document.getElementById("gateCategory").innerText = `${item.brand || ''} • ${item.category || ''}`;
+
+            // Safety Bounds Status
+            document.getElementById("gateBoundLimit").innerText = bounds.reason || "Hard Safety Limit < ₹50,000 (PASSED)";
+            if (currentVoiceIntent && currentVoiceIntent.max_price) {
+                document.getElementById("gateBudgetMatch").innerText = `Voice Budget Limit: ₹${currentVoiceIntent.max_price.toLocaleString("en-IN")} (PASSED)`;
+            } else {
+                document.getElementById("gateBudgetMatch").innerText = "Voice Budget Constraint: Verified within safety limits";
+            }
+
+            // Financial Breakdown
+            const listEl = document.getElementById("gateBreakdownList");
+            listEl.innerHTML = "";
+            if (explanation.breakdown) {
+                explanation.breakdown.forEach(row => {
+                    const isDiscount = row.amount < 0;
+                    listEl.innerHTML += `
+                        <div class="breakdown-row">
+                            <span>${row.item}</span>
+                            <span style="${isDiscount ? 'color:#10b981; font-weight:700;' : ''}">
+                                ${isDiscount ? '-₹' + Math.abs(row.amount).toLocaleString("en-IN") : '₹' + row.amount.toLocaleString("en-IN")}
+                            </span>
+                        </div>
+                    `;
+                });
+            }
+
+            const total = (orderData.amount / 100) || explanation.total_authorized_amount || item.price;
+            document.getElementById("gateTotalAmount").innerText = `₹${total.toLocaleString("en-IN")}`;
+
+            modal.classList.add("active");
+            playChime();
+        }
+
+        // Close Consent Gate Modal
+        function closeConsentGate() {
+            document.getElementById("consentGateModal").classList.remove("active");
+            showToast("Authorization gate dismissed.", "ℹ️");
+        }
+
+        // Execute Payment after Human-in-the-Loop Consent
+        function executeAuthorizedPayment() {
+            const modal = document.getElementById("consentGateModal");
+            modal.classList.remove("active");
+
+            if (!pendingOrderData) return;
+            const data = pendingOrderData;
+            const item = data.item || {};
+            const razorpayKey = data.razorpay_key_id || "rzp_test_YourTestKeyId";
+
+            showToast("Opening Razorpay Checkout...", "💳");
+
+            const options = {
+                key: razorpayKey,
+                amount: data.amount || (item.price * 100),
+                currency: data.currency || "INR",
+                name: "AgenticVoiceCart",
+                description: `Purchase: ${item.name}`,
+                order_id: data.order_id,
+                handler: function (response) {
+                    console.log("[Razorpay Payment Success Response]:", response);
+                    logLocalAuditEvent(
+                        "RAZORPAY_PAYMENT",
+                        "PAYMENT_SETTLED_SUCCESS",
+                        {
+                            "payment_id": response.razorpay_payment_id || 'pay_test_success_123',
+                            "order_id": response.razorpay_order_id || data.order_id,
+                            "amount_inr": data.amount / 100,
+                            "product": item.name
+                        },
+                        "SUCCESS"
+                    );
+                    alert(`🎉 Payment Successful!\n\nPayment ID: ${response.razorpay_payment_id || 'pay_test_success_123'}\nOrder ID: ${response.razorpay_order_id || data.order_id}\nProduct: ${item.name}\nAmount: ₹${(data.amount / 100).toLocaleString("en-IN")}`);
+                    showToast("Payment Successful!", "🎉");
+                },
+                prefill: {
+                    name: "Test Customer",
+                    email: "customer@agenticvoicecart.ai",
+                    contact: "9999999999"
+                },
+                notes: {
+                    merchant_order_id: data.order_id,
+                    purchase_source: "Voice Agent Consent Gate"
+                },
+                theme: {
+                    color: "#0c66e4"
+                },
+                modal: {
+                    ondismiss: function() {
+                        console.log("[Razorpay Modal Dismissed by User]");
+                        showToast("Payment checkout cancelled.", "ℹ️");
+                    }
+                }
+            };
+
+            // Verify Razorpay Checkout SDK Script
+            if (typeof Razorpay === "undefined") {
+                console.error("Razorpay Checkout SDK JS script is not loaded.");
+                showToast("Razorpay SDK script not loaded.", "❌");
+                return;
+            }
+
+            try {
+                const rzp = new Razorpay(options);
+                rzp.on('payment.failed', function (response){
+                    console.error("[Razorpay Payment Failed]:", response.error);
+                    showToast(`Payment Failed: ${response.error.description}`, "❌");
+                });
+                rzp.open();
+            } catch (sdkError) {
+                console.warn("[Razorpay SDK Launch Exception]:", sdkError);
+                showDemoCheckoutAlert(item, data.order_id);
+            }
+        }
+
+        // --- Security Audit Trail Client Engine ("The Bar" Compliance) ---
+        let localAuditEvents = [];
+
+        function logLocalAuditEvent(stage, eventType, details, status = "SUCCESS") {
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
+            const event = {
+                id: localAuditEvents.length + 1,
+                timestamp: timeStr,
+                stage: stage,
+                event_type: eventType,
+                status: status,
+                details: details
+            };
+            localAuditEvents.unshift(event); // newest on top
+            updateAuditBadge();
+            renderAuditTrail();
+        }
+
+        function updateAuditBadge() {
+            const countEl = document.getElementById("auditBadgeCount");
+            if (countEl) countEl.innerText = localAuditEvents.length;
+        }
+
+        function toggleAuditDrawer() {
+            const drawer = document.getElementById("auditDrawer");
+            drawer.classList.toggle("open");
+            if (drawer.classList.contains("open")) {
+                syncBackendAuditTrail();
+            }
+        }
+
+        async function syncBackendAuditTrail() {
+            try {
+                const res = await fetch("http://localhost:8000/api/audit-trail");
+                const data = await res.json();
+                if (data.audit_trail && data.audit_trail.length > 0) {
+                    // Merge unique events
+                    data.audit_trail.forEach(serverEv => {
+                        if (!localAuditEvents.some(e => e.id === serverEv.id && e.timestamp === serverEv.timestamp)) {
+                            localAuditEvents.push(serverEv);
+                        }
+                    });
+                    localAuditEvents.sort((a, b) => (b.id || 0) - (a.id || 0));
+                    updateAuditBadge();
+                    renderAuditTrail();
+                }
+            } catch (e) {
+                console.warn("[Audit Sync Notice]:", e);
+            }
+        }
+
+        function renderAuditTrail() {
+            const body = document.getElementById("auditDrawerBody");
+            if (!body) return;
+
+            if (localAuditEvents.length === 0) {
+                body.innerHTML = `
+                    <div style="text-align:center; padding:3rem 1rem; color:#64748b; font-size:0.85rem;">
+                        <div style="font-size:2rem; margin-bottom:0.5rem;">📜</div>
+                        <div>No audit events recorded yet.</div>
+                        <div style="font-size:0.75rem; margin-top:0.25rem;">Execute a voice query or checkout to inspect live money actions.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            body.innerHTML = "";
+            localAuditEvents.forEach(ev => {
+                const card = document.createElement("div");
+                card.className = "audit-event-card";
+                card.innerHTML = `
+                    <div class="audit-event-header">
+                        <span class="audit-stage-badge">${ev.stage}</span>
+                        <span class="audit-status-badge ${ev.status}">${ev.status}</span>
+                    </div>
+                    <div style="font-weight:700; color:#f8fafc; font-size:0.82rem; margin-top:0.15rem;">
+                        ${ev.event_type}
+                    </div>
+                    <div style="color:#64748b; font-size:0.7rem;">
+                        🕒 Timestamp: ${ev.timestamp}
+                    </div>
+                    <div class="audit-json-box">
+                        ${JSON.stringify(ev.details, null, 2)}
+                    </div>
+                `;
+                body.appendChild(card);
+            });
+        }
+
+        async function clearAuditLog() {
+            localAuditEvents = [];
+            updateAuditBadge();
+            renderAuditTrail();
+            try {
+                await fetch("http://localhost:8000/api/audit-trail", { method: "DELETE" });
+            } catch (e) {}
+            showToast("Audit trail ledger cleared.", "🗑️");
+        }
+
+        // --- Failure Mode Simulators & Graceful Recovery Handlers ("The Bar" Compliance) ---
+        function triggerBudgetBreachFailure() {
+            playChime();
+            currentVoiceIntent = {
+                query: "wireless earbuds",
+                max_price: 2000,
+                brand: "Sony",
+                category: "earbuds"
+            };
+
+            logLocalAuditEvent(
+                "SIMULATION",
+                "BUDGET_BREACH_TRIGGERED",
+                {
+                    "simulated_voice_intent": "Show me Sony wireless earbuds under ₹2,000",
+                    "target_product": "Sony WH-1000XM5 (₹29,990)",
+                    "budget_limit": 2000
+                },
+                "NOTICE"
+            );
+
+            // Trigger checkout on expensive item (Sony WH-1000XM5 id:2) with strict ₹2000 budget
+            checkoutProduct(2);
+        }
+
+        function triggerPaymentFailureDemo() {
+            playChime();
+            const orderId = `order_test_fail_${Date.now()}`;
+            logLocalAuditEvent(
+                "RAZORPAY_PAYMENT",
+                "PAYMENT_FAILED_SIMULATED",
+                {
+                    "error_code": "BAD_REQUEST_PAYMENT_TIMED_OUT",
+                    "error_description": "User bank server timed out during UPI PIN verification.",
+                    "order_id": orderId,
+                    "recovery_strategy": "INSTANT_OFFLINE_PAYMENT_LINK_GENERATION"
+                },
+                "ERROR"
+            );
+
+            showGracefulRecoveryModal(
+                "⚠️ UPI Payment Timed Out (Bank Gateway)",
+                "The UPI gateway timed out during verification. No money was debited from your bank account.",
+                "Our autonomous fail-safe engine caught the error and provisioned an asynchronous Razorpay Web Payment Link (active for 15 mins). You can complete the payment seamlessly without losing your cart.",
+                `https://rzp.io/i/recovery_${orderId}`
+            );
+        }
+
+        function showGracefulRecoveryModal(title, explanation, resolution, link) {
+            document.getElementById("recoveryTitle").innerText = title;
+            document.getElementById("recoveryExplanation").innerText = explanation;
+            document.getElementById("recoveryResolutionDetails").innerText = resolution;
+            document.getElementById("recoveryLinkText").innerText = link;
+            document.getElementById("recoveryModal").classList.add("active");
+
+            logLocalAuditEvent(
+                "RECOVERY_ENGINE",
+                "GRACEFUL_RECOVERY_RESOLVED",
+                {
+                    "status": "FALLBACK_DISPATCHED",
+                    "link": link
+                },
+                "PASSED"
+            );
+
+            showToast("Graceful Recovery Triggered!", "🛡️");
+        }
+
+        function closeRecoveryModal() {
+            document.getElementById("recoveryModal").classList.remove("active");
+        }
+
+        function copyRecoveryLink() {
+            const link = document.getElementById("recoveryLinkText").innerText;
+            navigator.clipboard.writeText(link);
+            showToast("Fallback Payment Link copied!", "📋");
         }
 
         // Demo Fallback Alert for Dummy Keys

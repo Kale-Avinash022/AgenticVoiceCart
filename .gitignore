@@ -11,7 +11,8 @@ __pycache__/
 *.mp3
 *.webm
 *.ps1
-test_*.py
+test_voice.py
+test_steps_*.py
 record_*.py
 sample_*.wav
 
