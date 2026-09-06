@@ -2,6 +2,7 @@ import os
 import tempfile
 import json
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query, Body
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
@@ -55,6 +56,13 @@ def record_audit_event(stage: str, event_type: str, details: dict, status: str =
     AUDIT_TRAIL.append(event)
     return event
 
+@app.get("/app")
+@app.get("/store")
+@app.get("/index.html")
+def get_storefront():
+    """Serves the frontend application interface."""
+    return FileResponse("index.html")
+
 @app.get("/")
 def read_root():
     """Root Endpoint / Health Check."""
@@ -79,6 +87,7 @@ def read_root():
             "agent_checkout": "/agent/v1/checkout (POST)",
             "agent_tools_spec": "/agent/v1/tools (GET)",
             "llms_manifest": "/llms.txt (GET)",
+            "frontend_storefront": "/app (or /store)",
             "catalog": "/catalog (GET)"
         }
     }
