@@ -208,6 +208,29 @@
             padding: 0.45rem 0.9rem;
             border-radius: var(--radius-pill);
             display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Dynamic Status Indicator Dot */
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981; /* Default: Online (Green) */
+            transition: all 0.25s ease;
+        }
+
+        .status-dot.busy {
+            background-color: #f59e0b; /* Amber */
+            box-shadow: 0 0 8px #f59e0b;
+        }
+
+        .status-dot.error {
+            background-color: #ef4444; /* Red */
+            box-shadow: 0 0 8px #ef4444;
+        }
+
         .btn-audit-toggle {
             background: rgba(37, 99, 235, 0.15);
             border: 1px solid rgba(56, 189, 248, 0.4);
@@ -362,6 +385,7 @@
         .hero-title span {
             background: linear-gradient(135deg, #38bdf8, #818cf8);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
