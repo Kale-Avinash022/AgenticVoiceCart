@@ -91,7 +91,7 @@ ffmpeg -version
 
 ### 2. Clone Repository & Setup Virtual Environment
 ```bash
-git clone https://github.com/thecreativeAVI/AgenticVoiceCart.git
+git clone https://github.com/Kale-Avinash022/AgenticVoiceCart.git
 cd AgenticVoiceCart
 
 # Create and activate virtual environment
